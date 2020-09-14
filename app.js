@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+var logsMiddleware = require('./modules/logsMiddleware');
+
 var app = express();
 
 app.use(bodyParser.json());
@@ -31,6 +33,14 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+// 日志记录中间件
+app.use('*', function(req, res) {
+  console.log('日志')
+  console.log(req)
+  console.log(res)
+  logsMiddleware(req, res)
+  next()
+})
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
